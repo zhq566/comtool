@@ -207,6 +207,45 @@ void frmComTool::initConfig()
 
     ui->ckAutoConnect->setChecked(AppConfig::AutoConnect);
     connect(ui->ckAutoConnect, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+
+    ui->checkBox_hex01->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex01, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex02->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex02, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex03->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex03, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex04->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex04, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex05->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex05, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex06->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex06, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex07->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex07, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex08->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex08, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->checkBox_hex09->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->checkBox_hex09, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+
+    ui->textEdit01->setText(AppConfig::sendTxt01);
+    ui->textEdit02->setText(AppConfig::sendTxt02);
+    ui->textEdit03->setText(AppConfig::sendTxt03);
+    ui->textEdit04->setText(AppConfig::sendTxt04);
+    ui->textEdit05->setText(AppConfig::sendTxt05);
+    ui->textEdit06->setText(AppConfig::sendTxt06);
+    ui->textEdit07->setText(AppConfig::sendTxt07);
+    ui->textEdit08->setText(AppConfig::sendTxt08);
+    ui->textEdit09->setText(AppConfig::sendTxt09);
+    connect(ui->sendButton_01, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_02, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_03, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_04, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_05, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_06, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_07, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_08, SIGNAL(clicked()), this, SLOT(saveConfig()));
+    connect(ui->sendButton_09, SIGNAL(clicked()), this, SLOT(saveConfig()));
+
 }
 
 void frmComTool::saveConfig()
@@ -243,6 +282,26 @@ void frmComTool::saveConfig()
     AppConfig::ListenPort = ui->txtListenPort->text().toInt();
     AppConfig::SleepTime = ui->cboxSleepTime->currentText().toInt();
     AppConfig::AutoConnect = ui->ckAutoConnect->isChecked();
+
+    AppConfig::sendTxt01 = ui->textEdit01->toPlainText();
+    AppConfig::sendTxt02 = ui->textEdit02->toPlainText();
+    AppConfig::sendTxt03 = ui->textEdit03->toPlainText();
+    AppConfig::sendTxt04 = ui->textEdit04->toPlainText();
+    AppConfig::sendTxt05 = ui->textEdit05->toPlainText();
+    AppConfig::sendTxt06 = ui->textEdit06->toPlainText();
+    AppConfig::sendTxt07 = ui->textEdit07->toPlainText();
+    AppConfig::sendTxt08 = ui->textEdit08->toPlainText();
+    AppConfig::sendTxt09 = ui->textEdit09->toPlainText();
+
+    AppConfig::sendTxt01_hex = ui->checkBox_hex01->isChecked();
+    AppConfig::sendTxt02_hex = ui->checkBox_hex02->isChecked();
+    AppConfig::sendTxt03_hex = ui->checkBox_hex03->isChecked();
+    AppConfig::sendTxt04_hex = ui->checkBox_hex04->isChecked();
+    AppConfig::sendTxt05_hex = ui->checkBox_hex05->isChecked();
+    AppConfig::sendTxt06_hex = ui->checkBox_hex06->isChecked();
+    AppConfig::sendTxt07_hex = ui->checkBox_hex07->isChecked();
+    AppConfig::sendTxt08_hex = ui->checkBox_hex08->isChecked();
+    AppConfig::sendTxt09_hex = ui->checkBox_hex09->isChecked();
 
     AppConfig::writeConfig();
 }

@@ -28,15 +28,15 @@ int AppConfig::ListenPort = 6000;
 int AppConfig::SleepTime = 100;
 bool AppConfig::AutoConnect = false;
 
-QString AppConfig::sendTxt01 = "";
-QString AppConfig::sendTxt02 = "";
-QString AppConfig::sendTxt03 = "";
-QString AppConfig::sendTxt04 = "";
-QString AppConfig::sendTxt05 = "";
-QString AppConfig::sendTxt06 = "";
-QString AppConfig::sendTxt07 = "";
-QString AppConfig::sendTxt08 = "";
-QString AppConfig::sendTxt09 = "";
+QString AppConfig::sendTxt01 = "欢迎使用串口助手";
+QString AppConfig::sendTxt02 = "本工具在飞扬清云的开源版本基础上修改";
+QString AppConfig::sendTxt03 = "增加常用发送功能";
+QString AppConfig::sendTxt04 = "增加高亮关键字符串功能";
+QString AppConfig::sendTxt05 = "00";
+QString AppConfig::sendTxt06 = "00";
+QString AppConfig::sendTxt07 = "00";
+QString AppConfig::sendTxt08 = "00";
+QString AppConfig::sendTxt09 = "00";
 bool AppConfig::sendTxt01_hex = false;
 bool AppConfig::sendTxt02_hex = false;
 bool AppConfig::sendTxt03_hex = false;
@@ -135,6 +135,28 @@ void AppConfig::writeConfig()
     set.setValue("ListenPort", AppConfig::ListenPort);
     set.setValue("SleepTime", AppConfig::SleepTime);
     set.setValue("AutoConnect", AppConfig::AutoConnect);
+    set.endGroup();
+
+    set.beginGroup("SendTxtConfig");
+    set.setValue("sendTxt01", AppConfig::sendTxt01);
+    set.setValue("sendTxt02", AppConfig::sendTxt02);
+    set.setValue("sendTxt03", AppConfig::sendTxt03);
+    set.setValue("sendTxt04", AppConfig::sendTxt04);
+    set.setValue("sendTxt05", AppConfig::sendTxt05);
+    set.setValue("sendTxt06", AppConfig::sendTxt06);
+    set.setValue("sendTxt07", AppConfig::sendTxt07);
+    set.setValue("sendTxt08", AppConfig::sendTxt08);
+    set.setValue("sendTxt09", AppConfig::sendTxt09);
+
+    set.setValue("sendTxt01_hex", AppConfig::sendTxt01_hex);
+    set.setValue("sendTxt02_hex", AppConfig::sendTxt02_hex);
+    set.setValue("sendTxt03_hex", AppConfig::sendTxt03_hex);
+    set.setValue("sendTxt04_hex", AppConfig::sendTxt04_hex);
+    set.setValue("sendTxt05_hex", AppConfig::sendTxt05_hex);
+    set.setValue("sendTxt06_hex", AppConfig::sendTxt06_hex);
+    set.setValue("sendTxt07_hex", AppConfig::sendTxt07_hex);
+    set.setValue("sendTxt08_hex", AppConfig::sendTxt08_hex);
+    set.setValue("sendTxt09_hex", AppConfig::sendTxt09_hex);
     set.endGroup();
 }
 
