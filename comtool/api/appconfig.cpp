@@ -28,6 +28,25 @@ int AppConfig::ListenPort = 6000;
 int AppConfig::SleepTime = 100;
 bool AppConfig::AutoConnect = false;
 
+QString AppConfig::sendTxt01 = "";
+QString AppConfig::sendTxt02 = "";
+QString AppConfig::sendTxt03 = "";
+QString AppConfig::sendTxt04 = "";
+QString AppConfig::sendTxt05 = "";
+QString AppConfig::sendTxt06 = "";
+QString AppConfig::sendTxt07 = "";
+QString AppConfig::sendTxt08 = "";
+QString AppConfig::sendTxt09 = "";
+bool AppConfig::sendTxt01_hex = false;
+bool AppConfig::sendTxt02_hex = false;
+bool AppConfig::sendTxt03_hex = false;
+bool AppConfig::sendTxt04_hex = false;
+bool AppConfig::sendTxt05_hex = false;
+bool AppConfig::sendTxt06_hex = false;
+bool AppConfig::sendTxt07_hex = false;
+bool AppConfig::sendTxt08_hex = false;
+bool AppConfig::sendTxt09_hex = false;
+
 void AppConfig::readConfig()
 {
     if (!QUIHelper::checkIniFile(AppConfig::ConfigFile)) {
@@ -62,6 +81,28 @@ void AppConfig::readConfig()
     AppConfig::ListenPort = set.value("ListenPort", AppConfig::ListenPort).toInt();
     AppConfig::SleepTime = set.value("SleepTime", AppConfig::SleepTime).toInt();
     AppConfig::AutoConnect = set.value("AutoConnect", AppConfig::AutoConnect).toBool();
+    set.endGroup();
+
+    set.beginGroup("SendTxtConfig");
+    AppConfig::sendTxt01 = set.value("sendTxt01", AppConfig::sendTxt01).toString();
+    AppConfig::sendTxt02 = set.value("sendTxt02", AppConfig::sendTxt02).toString();
+    AppConfig::sendTxt03 = set.value("sendTxt03", AppConfig::sendTxt03).toString();
+    AppConfig::sendTxt04 = set.value("sendTxt04", AppConfig::sendTxt04).toString();
+    AppConfig::sendTxt05 = set.value("sendTxt05", AppConfig::sendTxt05).toString();
+    AppConfig::sendTxt06 = set.value("sendTxt06", AppConfig::sendTxt06).toString();
+    AppConfig::sendTxt07 = set.value("sendTxt07", AppConfig::sendTxt07).toString();
+    AppConfig::sendTxt08 = set.value("sendTxt08", AppConfig::sendTxt08).toString();
+    AppConfig::sendTxt09 = set.value("sendTxt09", AppConfig::sendTxt09).toString();
+
+    AppConfig::sendTxt01_hex = set.value("sendTxt01_hex", AppConfig::sendTxt01_hex).toBool();
+    AppConfig::sendTxt02_hex = set.value("sendTxt02_hex", AppConfig::sendTxt02_hex).toBool();
+    AppConfig::sendTxt03_hex = set.value("sendTxt03_hex", AppConfig::sendTxt03_hex).toBool();
+    AppConfig::sendTxt04_hex = set.value("sendTxt04_hex", AppConfig::sendTxt04_hex).toBool();
+    AppConfig::sendTxt05_hex = set.value("sendTxt05_hex", AppConfig::sendTxt05_hex).toBool();
+    AppConfig::sendTxt06_hex = set.value("sendTxt06_hex", AppConfig::sendTxt06_hex).toBool();
+    AppConfig::sendTxt07_hex = set.value("sendTxt07_hex", AppConfig::sendTxt07_hex).toBool();
+    AppConfig::sendTxt08_hex = set.value("sendTxt08_hex", AppConfig::sendTxt08_hex).toBool();
+    AppConfig::sendTxt09_hex = set.value("sendTxt09_hex", AppConfig::sendTxt09_hex).toBool();
     set.endGroup();
 }
 

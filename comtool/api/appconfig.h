@@ -43,6 +43,27 @@ public:
     static QStringList Values;
     static void readSendData();
     static void readDeviceData();
+
+    //常用发送存储
+    static QString sendTxt01;
+    static QString sendTxt02;
+    static QString sendTxt03;
+    static QString sendTxt04;
+    static QString sendTxt05;
+    static QString sendTxt06;
+    static QString sendTxt07;
+    static QString sendTxt08;
+    static QString sendTxt09;
+    static bool sendTxt01_hex;
+    static bool sendTxt02_hex;
+    static bool sendTxt03_hex;
+    static bool sendTxt04_hex;
+    static bool sendTxt05_hex;
+    static bool sendTxt06_hex;
+    static bool sendTxt07_hex;
+    static bool sendTxt08_hex;
+    static bool sendTxt09_hex;
+
 };
 
 #endif // APPCONFIG_H

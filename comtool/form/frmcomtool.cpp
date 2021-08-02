@@ -27,6 +27,8 @@ frmComTool::frmComTool(QWidget *parent) : QWidget(parent), ui(new Ui::frmComTool
     connect(highLight3,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight3_triggered()));
 
     ui->txtMain->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    ui->widget_sendUI->hide();
 }
 
 frmComTool::~frmComTool()
@@ -257,7 +259,7 @@ void frmComTool::changeEnable(bool b)
     ui->ckAutoSave->setEnabled(b);
 }
 
-void frmComTool::append(int type, const QString &data, bool clear)
+void frmComTool::append(int type, const QString &data, bool clear, bool isCheckHex)
 {
     static int currentCount = 0;
     static int maxCount = 100;
@@ -285,7 +287,11 @@ void frmComTool::append(int type, const QString &data, bool clear)
     //不同类型不同颜色显示
     QString strType;
     if (type == 0) {
-        strType = "串口发送 >>";
+        if (isCheckHex) {
+            strType = "串口发送[HEX] >>";
+        } else {
+            strType = "串口发送[ASCII] >>";
+        }
         ui->txtMain->setTextColor(QColor("dodgerblue"));
     } else if (type == 1) {
         strType = "串口接收 <<";
@@ -339,20 +345,20 @@ void frmComTool::readData()
             int count = AppConfig::Keys.count();
             for (int i = 0; i < count; i++) {
                 if (buffer.startsWith(AppConfig::Keys.at(i))) {
-                    sendData(AppConfig::Values.at(i));
+                    sendData(AppConfig::Values.at(i), 0);
                     break;
                 }
             }
         }
 
-        append(1, buffer);
+        append(1, buffer, false, false);
         receiveCount = receiveCount + data.size();
         ui->btnReceiveCount->setText(QString("接收 : %1 字节").arg(receiveCount));
 
         //启用网络转发则调用网络发送数据
         if (tcpOk) {
             socket->write(data);
-            append(4, QString(buffer));
+            append(4, QString(buffer), false, false);
         }
     }
 }
@@ -365,7 +371,7 @@ void frmComTool::sendData()
         return;
     }
 
-    sendData(str);
+    sendData(str, 0);
 
     if (ui->ckAutoClear->isChecked()) {
         ui->cboxData->setCurrentIndex(-1);
@@ -373,7 +379,7 @@ void frmComTool::sendData()
     }
 }
 
-void frmComTool::sendData(QString data)
+void frmComTool::sendData(QString data, int hexCheckNo)
 {
     if (com == 0 || !com->isOpen()) {
         return;
@@ -385,14 +391,16 @@ void frmComTool::sendData(QString data)
     }
 
     QByteArray buffer;
-    if (ui->ckHexSend->isChecked()) {
+    bool checkResult = isCheckHex(hexCheckNo);
+
+    if (checkResult) {
         buffer = QUIHelper::hexStrToByteArray(data);
     } else {
         buffer = QUIHelper::asciiStrToByteArray(data);
     }
 
     com->write(buffer);
-    append(0, data);
+    append(0, data, false, checkResult);
     sendCount = sendCount + buffer.size();
     ui->btnSendCount->setText(QString("发送 : %1 字节").arg(sendCount));
 }
@@ -507,28 +515,28 @@ void frmComTool::on_btnData_clicked()
 
 void frmComTool::on_btnClear_clicked()
 {
-    append(0, "", true);
+    append(0, "", true, false);
 }
 
 void frmComTool::on_btnStart_clicked()
 {
     if (ui->btnStart->text() == "启动") {
         if (AppConfig::ServerIP == "" || AppConfig::ServerPort == 0) {
-            append(6, "IP地址和远程端口不能为空");
+            append(6, "IP地址和远程端口不能为空", false, false);
             return;
         }
 
         socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
         if (socket->waitForConnected(100)) {
             ui->btnStart->setText("停止");
-            append(6, "连接服务器成功");
+            append(6, "连接服务器成功", false, false);
             tcpOk = true;
         }
     } else {
         socket->disconnectFromHost();
         if (socket->state() == QAbstractSocket::UnconnectedState || socket->waitForDisconnected(100)) {
             ui->btnStart->setText("启动");
-            append(6, "断开服务器成功");
+            append(6, "断开服务器成功", false, false);
             tcpOk = false;
         }
     }
@@ -605,7 +613,7 @@ void frmComTool::connectNet()
             socket->connectToHost(AppConfig::ServerIP, AppConfig::ServerPort);
             if (socket->waitForConnected(100)) {
                 ui->btnStart->setText("停止");
-                append(6, "连接服务器成功");
+                append(6, "连接服务器成功", false, false);
                 tcpOk = true;
             }
         }
@@ -625,12 +633,12 @@ void frmComTool::readDataNet()
             buffer = QUIHelper::byteArrayToAsciiStr(data);
         }
 
-        append(5, buffer);
+        append(5, buffer, false, false);
 
         //将收到的网络数据转发给串口
         if (comOk) {
             com->write(data);
-            append(0, buffer);
+            append(0, buffer, false, false);
         }
     }
 }
@@ -638,7 +646,7 @@ void frmComTool::readDataNet()
 void frmComTool::readErrorNet()
 {
     ui->btnStart->setText("启动");
-    append(6, QString("连接服务器失败,%1").arg(socket->errorString()));
+    append(6, QString("连接服务器失败,%1").arg(socket->errorString()), false, false);
     socket->disconnectFromHost();
     tcpOk = false;
 }
@@ -689,3 +697,173 @@ void frmComTool::HightLight(int type, QString highLightStr)
 
     return;
 }
+
+bool frmComTool::isCheckHex(int no)
+{
+    bool isHex = false;
+    switch(no)
+    {
+    case 0:{
+        if(ui->ckHexSend->isChecked())
+            isHex = true;
+            break;
+       }
+    case 1:{
+       if(ui->checkBox_hex01->isChecked())
+           isHex = true;
+           break;
+       }
+    case 2:{
+       if(ui->checkBox_hex02->isChecked())
+           isHex = true;
+           break;
+       }
+    case 3:{
+       if(ui->checkBox_hex03->isChecked())
+           isHex = true;
+           break;
+       }
+    case 4:{
+       if(ui->checkBox_hex04->isChecked())
+           isHex = true;
+           break;
+       }
+    case 5:{
+       if(ui->checkBox_hex05->isChecked())
+           isHex = true;
+           break;
+       }
+    case 6:{
+       if(ui->checkBox_hex06->isChecked())
+           isHex = true;
+           break;
+       }
+    case 7:{
+       if(ui->checkBox_hex07->isChecked())
+           isHex = true;
+           break;
+       }
+    case 8:{
+       if(ui->checkBox_hex08->isChecked())
+           isHex = true;
+           break;
+       }
+    case 9:{
+       if(ui->checkBox_hex09->isChecked())
+           isHex = true;
+           break;
+       }
+    }
+    return isHex;
+}
+
+void frmComTool::on_expandButton_clicked()
+{
+    if(ui->widget_sendUI->isHidden()) {
+        ui->widget_sendUI->show();
+        ui->expandButton->setText("收起");
+    } else {
+        ui->widget_sendUI->hide();
+        ui->expandButton->setText("展开");
+    }
+}
+
+
+void frmComTool::on_sendButton_01_clicked()
+{
+    QString str = ui->textEdit01->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 1);
+}
+
+
+void frmComTool::on_sendButton_02_clicked()
+{
+    QString str = ui->textEdit02->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 2);
+}
+
+
+void frmComTool::on_sendButton_03_clicked()
+{
+    QString str = ui->textEdit03->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 3);
+}
+
+
+void frmComTool::on_sendButton_04_clicked()
+{
+    QString str = ui->textEdit04->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 4);
+}
+
+
+void frmComTool::on_sendButton_05_clicked()
+{
+    QString str = ui->textEdit05->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 5);
+}
+
+
+void frmComTool::on_sendButton_06_clicked()
+{
+    QString str = ui->textEdit06->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 6);
+}
+
+
+void frmComTool::on_sendButton_07_clicked()
+{
+    QString str = ui->textEdit07->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 7);
+}
+
+
+void frmComTool::on_sendButton_08_clicked()
+{
+    QString str = ui->textEdit08->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 8);
+}
+
+
+void frmComTool::on_sendButton_09_clicked()
+{
+    QString str = ui->textEdit09->toPlainText();
+    if (str.isEmpty()) {
+        return;
+    }
+
+    sendData(str, 9);
+}
+

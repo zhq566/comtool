@@ -62,11 +62,13 @@ private slots:
     void saveConfig();          //保存配置文件
     void readData();            //读取串口数据
     void sendData();            //发送串口数据
-    void sendData(QString data);//发送串口数据带参数
+    void sendData(QString data, int hexCheck);//发送串口数据带参数
     void saveData();            //保存串口数据
 
     void changeEnable(bool b);  //改变状态
-    void append(int type, const QString &data, bool clear = false);
+    void append(int type, const QString &data, bool clear = false, bool isCheckHex = true);
+
+    bool isCheckHex(int no);
 
 private slots:
     void connectNet();
@@ -86,6 +88,16 @@ private slots:
     void on_action_HighLight1_triggered();
     void on_action_HighLight2_triggered();
     void on_action_HighLight3_triggered();
+    void on_expandButton_clicked();
+    void on_sendButton_01_clicked();
+    void on_sendButton_02_clicked();
+    void on_sendButton_03_clicked();
+    void on_sendButton_04_clicked();
+    void on_sendButton_05_clicked();
+    void on_sendButton_06_clicked();
+    void on_sendButton_07_clicked();
+    void on_sendButton_08_clicked();
+    void on_sendButton_09_clicked();
 };
 
 #endif // FRMCOMTOOL_H
