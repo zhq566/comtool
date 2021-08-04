@@ -14,12 +14,16 @@ RESOURCES   += other/main.qrc
 INCLUDEPATH += $$PWD
 INCLUDEPATH += $$PWD/api
 INCLUDEPATH += $$PWD/form
+INCLUDEPATH += $$PWD/frame
 
 include ($$PWD/api/api.pri)
 include ($$PWD/form/form.pri)
+include ($$PWD/frame/frame.pri)
 
 INCLUDEPATH += $$PWD/../core_qui
 include ($$PWD/../core_qui/core_qui.pri)
 
 INCLUDEPATH += $$PWD/../3rd_qextserialport
 include ($$PWD/../3rd_qextserialport/3rd_qextserialport.pri)
+
+DISTFILES +=

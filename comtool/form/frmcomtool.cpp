@@ -1,6 +1,7 @@
 ﻿#include "frmcomtool.h"
 #include "ui_frmcomtool.h"
 #include "quihelper.h"
+#include "frame.h"
 
 frmComTool::frmComTool(QWidget *parent) : QWidget(parent), ui(new Ui::frmComTool)
 {
@@ -76,6 +77,10 @@ void frmComTool::initForm()
     connect(timerConnect, SIGNAL(timeout()), this, SLOT(connectNet()));
     timerConnect->setInterval(3000);
     timerConnect->start();
+
+    if(!FrameHelper::GetInfoFromFile()) {
+        frmComTool::append(6, QStringLiteral("FrameJson文件解析失败！"));
+    }
 
 #ifdef __arm__
     ui->widgetRight->setFixedWidth(280);
@@ -372,8 +377,15 @@ void frmComTool::append(int type, const QString &data, bool clear, bool isCheckH
         ui->txtMain->setTextColor(QColor(100, 184, 255));
     }
 
-    strData = QString("时间[%1] %2 %3").arg(TIMEMS).arg(strType).arg(strData);
-    ui->txtMain->append(strData);
+    ui->txtMain->append(QString("时间[%1] %2 %3").arg(TIMEMS).arg(strType).arg(strData));
+
+    if (isCheckHex && ui->checkBox_trans->isChecked() && FrameHelper::jsonIsCorrect) {
+        strData = FrameHelper::TranslateStr(strData);
+        if (strData != "") {
+            ui->txtMain->append(strData);
+        }
+    }
+
     currentCount++;
 }
 
@@ -410,7 +422,7 @@ void frmComTool::readData()
             }
         }
 
-        append(1, buffer, false, false);
+        append(1, buffer, false, ui->ckHexReceive->isChecked());
         receiveCount = receiveCount + data.size();
         ui->btnReceiveCount->setText(QString("接收 : %1 字节").arg(receiveCount));
 
@@ -626,6 +638,13 @@ void frmComTool::on_ckAutoSave_stateChanged(int arg1)
 void frmComTool::on_action_HighLight1_triggered()
 {
     if (highLight1->text() == HIGH_LIGHT_TITLE_1) {
+        if (ui->txtMain->textCursor().selectedText() == "") {
+            return;
+        }
+        if (ui->txtMain->textCursor().selectedText() == highLight2_str
+                || ui->txtMain->textCursor().selectedText() == highLight3_str) {
+            return;
+        }
         highLight1_str = ui->txtMain->textCursor().selectedText();
         HightLight(HIGH_LIGHT_COLOR_1, highLight1_str);
         highLight1->setText(HIGH_LIGHT_CANCEL_TITLE_1);
@@ -640,6 +659,13 @@ void frmComTool::on_action_HighLight1_triggered()
 void frmComTool::on_action_HighLight2_triggered()
 {
     if (highLight2->text() == HIGH_LIGHT_TITLE_2) {
+        if (ui->txtMain->textCursor().selectedText() == "") {
+            return;
+        }
+        if (ui->txtMain->textCursor().selectedText() == highLight1_str
+                || ui->txtMain->textCursor().selectedText() == highLight3_str) {
+            return;
+        }
         highLight2_str = ui->txtMain->textCursor().selectedText();
         HightLight(HIGH_LIGHT_COLOR_2, highLight2_str);
         highLight2->setText(HIGH_LIGHT_CANCEL_TITLE_2);
@@ -654,6 +680,13 @@ void frmComTool::on_action_HighLight2_triggered()
 void frmComTool::on_action_HighLight3_triggered()
 {
     if (highLight3->text() == HIGH_LIGHT_TITLE_3) {
+        if (ui->txtMain->textCursor().selectedText() == "") {
+            return;
+        }
+        if (ui->txtMain->textCursor().selectedText() == highLight1_str
+                || ui->txtMain->textCursor().selectedText() == highLight2_str) {
+            return;
+        }
         highLight3_str = ui->txtMain->textCursor().selectedText();
         HightLight(HIGH_LIGHT_COLOR_3, highLight3_str);
         highLight3->setText(HIGH_LIGHT_CANCEL_TITLE_3);
