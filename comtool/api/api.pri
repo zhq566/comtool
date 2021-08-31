@@ -3,3 +3,4 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/appconfig.cpp
+

@@ -1,7 +1,7 @@
 ﻿#include "frmcomtool.h"
 #include "ui_frmcomtool.h"
 #include "quihelper.h"
-#include "frame.h"
+#include "qextserialenumerator.h"
 
 frmComTool::frmComTool(QWidget *parent) : QWidget(parent), ui(new Ui::frmComTool)
 {
@@ -78,26 +78,34 @@ void frmComTool::initForm()
     timerConnect->setInterval(3000);
     timerConnect->start();
 
-    if(!FrameHelper::GetInfoFromFile()) {
-        frmComTool::append(6, QStringLiteral("FrameJson文件解析失败！"));
-    }
-
 #ifdef __arm__
     ui->widgetRight->setFixedWidth(280);
 #endif
 }
 
-void frmComTool::initConfig()
+void frmComTool::update_comName(void)
 {
     QStringList comList;
-    for (int i = 1; i <= 20; i++) {
-        comList << QString("COM%1").arg(i);
+    QString tips;
+    foreach (QextPortInfo ports, QextSerialEnumerator::getPorts()) {
+        if (ports.portName != "") {
+            comList.append(ports.portName);
+            tips.append(ports.portName);
+            tips.append(":");
+            tips.append(ports.friendName);
+            tips.append("\n");
+        }
     }
-
-    comList << "ttyUSB0" << "ttyS0" << "ttyS1" << "ttyS2" << "ttyS3" << "ttyS4";
-    comList << "ttymxc1" << "ttymxc2" << "ttymxc3" << "ttymxc4";
-    comList << "ttySAC1" << "ttySAC2" << "ttySAC3" << "ttySAC4";
+    tips.chop(1);
+    ui->cboxPortName->clear();
     ui->cboxPortName->addItems(comList);
+    ui->cboxPortName->setToolTip(tips);
+}
+
+void frmComTool::initConfig()
+{
+    frmComTool::update_comName();
+
     ui->cboxPortName->setCurrentIndex(ui->cboxPortName->findText(AppConfig::PortName));
     connect(ui->cboxPortName, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
 
@@ -251,6 +259,7 @@ void frmComTool::initConfig()
     connect(ui->sendButton_08, SIGNAL(clicked()), this, SLOT(saveConfig()));
     connect(ui->sendButton_09, SIGNAL(clicked()), this, SLOT(saveConfig()));
 
+    connect(ui->cboxPortName, SIGNAL(clicked()), this, SLOT(on_cboxPortName_clicked()));
 }
 
 void frmComTool::saveConfig()
@@ -350,6 +359,7 @@ void frmComTool::append(int type, const QString &data, bool clear, bool isCheckH
 
     //不同类型不同颜色显示
     QString strType;
+    ui->txtMain->setTextBackgroundColor(QColor("white"));
     if (type == 0) {
         if (isCheckHex) {
             strType = "串口发送[HEX] >>";
@@ -378,15 +388,16 @@ void frmComTool::append(int type, const QString &data, bool clear, bool isCheckH
     }
 
     ui->txtMain->append(QString("时间[%1] %2 %3").arg(TIMEMS).arg(strType).arg(strData));
-
-    if (isCheckHex && ui->checkBox_trans->isChecked() && FrameHelper::jsonIsCorrect) {
-        strData = FrameHelper::TranslateStr(strData);
-        if (strData != "") {
-            ui->txtMain->append(strData);
-        }
-    }
-
     currentCount++;
+    if (highLight1_str != "") {
+        HightLight(HIGH_LIGHT_COLOR_1, highLight1_str);
+    }
+    if (highLight2_str != "") {
+        HightLight(HIGH_LIGHT_COLOR_2, highLight2_str);
+    }
+    if (highLight3_str != "") {
+        HightLight(HIGH_LIGHT_COLOR_3, highLight3_str);
+    }
 }
 
 void frmComTool::readData()
@@ -959,3 +970,7 @@ void frmComTool::on_sendButton_09_clicked()
     sendData(str, 9);
 }
 
+void frmComTool::on_cboxPortName_clicked()
+{
+    frmComTool::update_comName();
+}

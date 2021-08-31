@@ -55,6 +55,7 @@ private:
     QString highLight3_str;
 
     void HightLight(int type, QString highLightStr);    //高亮关键词
+    void update_comName(void);
 
 private slots:
     void initForm();            //初始化窗体数据
@@ -98,6 +99,7 @@ private slots:
     void on_sendButton_07_clicked();
     void on_sendButton_08_clicked();
     void on_sendButton_09_clicked();
+    void on_cboxPortName_clicked();
 };
 
 #endif // FRMCOMTOOL_H
