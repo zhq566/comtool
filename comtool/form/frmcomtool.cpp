@@ -221,24 +221,24 @@ void frmComTool::initConfig()
     ui->ckAutoConnect->setChecked(AppConfig::AutoConnect);
     connect(ui->ckAutoConnect, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
 
-    ui->checkBox_hex01->setChecked(AppConfig::sendTxt01_hex);
-    connect(ui->checkBox_hex01, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex02->setChecked(AppConfig::sendTxt02_hex);
-    connect(ui->checkBox_hex02, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex03->setChecked(AppConfig::sendTxt03_hex);
-    connect(ui->checkBox_hex03, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex04->setChecked(AppConfig::sendTxt04_hex);
-    connect(ui->checkBox_hex04, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex05->setChecked(AppConfig::sendTxt05_hex);
-    connect(ui->checkBox_hex05, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex06->setChecked(AppConfig::sendTxt06_hex);
-    connect(ui->checkBox_hex06, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex07->setChecked(AppConfig::sendTxt07_hex);
-    connect(ui->checkBox_hex07, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex08->setChecked(AppConfig::sendTxt08_hex);
-    connect(ui->checkBox_hex08, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex09->setChecked(AppConfig::sendTxt09_hex);
-    connect(ui->checkBox_hex09, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex01->setChecked(AppConfig::sendTxt01_hex);
+    connect(ui->cb_hex01, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex02->setChecked(AppConfig::sendTxt02_hex);
+    connect(ui->cb_hex02, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex03->setChecked(AppConfig::sendTxt03_hex);
+    connect(ui->cb_hex03, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex04->setChecked(AppConfig::sendTxt04_hex);
+    connect(ui->cb_hex04, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex05->setChecked(AppConfig::sendTxt05_hex);
+    connect(ui->cb_hex05, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex06->setChecked(AppConfig::sendTxt06_hex);
+    connect(ui->cb_hex06, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex07->setChecked(AppConfig::sendTxt07_hex);
+    connect(ui->cb_hex07, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex08->setChecked(AppConfig::sendTxt08_hex);
+    connect(ui->cb_hex08, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
+    ui->cb_hex09->setChecked(AppConfig::sendTxt09_hex);
+    connect(ui->cb_hex09, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
 
     ui->textEdit01->setText(AppConfig::sendTxt01);
     ui->textEdit02->setText(AppConfig::sendTxt02);
@@ -249,15 +249,27 @@ void frmComTool::initConfig()
     ui->textEdit07->setText(AppConfig::sendTxt07);
     ui->textEdit08->setText(AppConfig::sendTxt08);
     ui->textEdit09->setText(AppConfig::sendTxt09);
-    connect(ui->sendButton_01, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_02, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_03, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_04, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_05, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_06, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_07, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_08, SIGNAL(clicked()), this, SLOT(saveConfig()));
-    connect(ui->sendButton_09, SIGNAL(clicked()), this, SLOT(saveConfig()));
+
+    QSignalMapper *myMapper;
+    myMapper = new QSignalMapper(this);
+
+    QPushButton *btn[SEND_BTN_NUM] = {
+        ui->sendButton_01,
+        ui->sendButton_02,
+        ui->sendButton_03,
+        ui->sendButton_04,
+        ui->sendButton_05,
+        ui->sendButton_06,
+        ui->sendButton_07,
+        ui->sendButton_08,
+        ui->sendButton_09
+    };
+    for (int i = 0; i < SEND_BTN_NUM; i++) {
+        connect(btn[i], SIGNAL(clicked(bool)), myMapper, SLOT(map()));
+        connect(btn[i], SIGNAL(clicked(bool)), this, SLOT(saveConfig()));
+        myMapper->setMapping(btn[i], i);
+    }
+    connect(myMapper, SIGNAL(mappedInt(int)), this, SLOT(moreSendbtn_func(int)));
 
     connect(ui->cboxPortName, SIGNAL(clicked()), this, SLOT(on_cboxPortName_clicked()));
 }
@@ -307,15 +319,15 @@ void frmComTool::saveConfig()
     AppConfig::sendTxt08 = ui->textEdit08->toPlainText();
     AppConfig::sendTxt09 = ui->textEdit09->toPlainText();
 
-    AppConfig::sendTxt01_hex = ui->checkBox_hex01->isChecked();
-    AppConfig::sendTxt02_hex = ui->checkBox_hex02->isChecked();
-    AppConfig::sendTxt03_hex = ui->checkBox_hex03->isChecked();
-    AppConfig::sendTxt04_hex = ui->checkBox_hex04->isChecked();
-    AppConfig::sendTxt05_hex = ui->checkBox_hex05->isChecked();
-    AppConfig::sendTxt06_hex = ui->checkBox_hex06->isChecked();
-    AppConfig::sendTxt07_hex = ui->checkBox_hex07->isChecked();
-    AppConfig::sendTxt08_hex = ui->checkBox_hex08->isChecked();
-    AppConfig::sendTxt09_hex = ui->checkBox_hex09->isChecked();
+    AppConfig::sendTxt01_hex = ui->cb_hex01->isChecked();
+    AppConfig::sendTxt02_hex = ui->cb_hex02->isChecked();
+    AppConfig::sendTxt03_hex = ui->cb_hex03->isChecked();
+    AppConfig::sendTxt04_hex = ui->cb_hex04->isChecked();
+    AppConfig::sendTxt05_hex = ui->cb_hex05->isChecked();
+    AppConfig::sendTxt06_hex = ui->cb_hex06->isChecked();
+    AppConfig::sendTxt07_hex = ui->cb_hex07->isChecked();
+    AppConfig::sendTxt08_hex = ui->cb_hex08->isChecked();
+    AppConfig::sendTxt09_hex = ui->cb_hex09->isChecked();
 
     AppConfig::writeConfig();
 }
@@ -516,16 +528,15 @@ void frmComTool::sendData(QString data, int hexCheckNo)
         data += "\r";
     }
 
-    //屏蔽中文
-    if (frmComTool::StrHaveChinese(data)) {
-       frmComTool::append(6, "本软件不支持发送中文字符，请确认!", false, false);
-       return;
-    }
-
     QByteArray buffer;
     bool checkResult = isCheckHex(hexCheckNo);
 
     if (checkResult) {
+        //HEX屏蔽中文
+        if (frmComTool::StrHaveChinese(data)) {
+           frmComTool::append(6, "本软件不支持发送中文字符，请确认!", false, false);
+           return;
+        }
         data = frmComTool::formatInput(data);
         buffer = QUIHelper::hexStrToByteArray(data);
     } else {
@@ -863,52 +874,90 @@ bool frmComTool::isCheckHex(int no)
             break;
        }
     case 1:{
-       if(ui->checkBox_hex01->isChecked())
+       if(ui->cb_hex01->isChecked())
            isHex = true;
            break;
        }
     case 2:{
-       if(ui->checkBox_hex02->isChecked())
+       if(ui->cb_hex02->isChecked())
            isHex = true;
            break;
        }
     case 3:{
-       if(ui->checkBox_hex03->isChecked())
+       if(ui->cb_hex03->isChecked())
            isHex = true;
            break;
        }
     case 4:{
-       if(ui->checkBox_hex04->isChecked())
+       if(ui->cb_hex04->isChecked())
            isHex = true;
            break;
        }
     case 5:{
-       if(ui->checkBox_hex05->isChecked())
+       if(ui->cb_hex05->isChecked())
            isHex = true;
            break;
        }
     case 6:{
-       if(ui->checkBox_hex06->isChecked())
+       if(ui->cb_hex06->isChecked())
            isHex = true;
            break;
        }
     case 7:{
-       if(ui->checkBox_hex07->isChecked())
+       if(ui->cb_hex07->isChecked())
            isHex = true;
            break;
        }
     case 8:{
-       if(ui->checkBox_hex08->isChecked())
+       if(ui->cb_hex08->isChecked())
            isHex = true;
            break;
        }
     case 9:{
-       if(ui->checkBox_hex09->isChecked())
+       if(ui->cb_hex09->isChecked())
            isHex = true;
            break;
        }
     }
     return isHex;
+}
+
+void frmComTool::moreSendbtn_func(int index)
+{
+    QString str;
+    switch(index) {
+        case 0:{
+            str = ui->textEdit01->toPlainText();
+        }break;
+        case 1:{
+            str = ui->textEdit02->toPlainText();
+        }break;
+        case 2:{
+            str = ui->textEdit03->toPlainText();
+        }break;
+        case 3:{
+            str = ui->textEdit04->toPlainText();
+        }break;
+        case 4:{
+            str = ui->textEdit05->toPlainText();
+        }break;
+        case 5:{
+            str = ui->textEdit06->toPlainText();
+        }break;
+        case 6:{
+            str = ui->textEdit07->toPlainText();
+        }break;
+        case 7:{
+            str = ui->textEdit08->toPlainText();
+        }break;
+        case 8:{
+            str = ui->textEdit09->toPlainText();
+        }break;
+    }
+    if (str.isEmpty()) {
+        return;
+    }
+    sendData(str, index + 1);
 }
 
 void frmComTool::on_expandButton_clicked()
@@ -920,105 +969,6 @@ void frmComTool::on_expandButton_clicked()
         ui->widget_sendUI->hide();
         ui->expandButton->setText("展开");
     }
-}
-
-
-void frmComTool::on_sendButton_01_clicked()
-{
-    QString str = ui->textEdit01->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 1);
-}
-
-
-void frmComTool::on_sendButton_02_clicked()
-{
-    QString str = ui->textEdit02->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 2);
-}
-
-
-void frmComTool::on_sendButton_03_clicked()
-{
-    QString str = ui->textEdit03->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 3);
-}
-
-
-void frmComTool::on_sendButton_04_clicked()
-{
-    QString str = ui->textEdit04->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 4);
-}
-
-
-void frmComTool::on_sendButton_05_clicked()
-{
-    QString str = ui->textEdit05->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 5);
-}
-
-
-void frmComTool::on_sendButton_06_clicked()
-{
-    QString str = ui->textEdit06->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 6);
-}
-
-
-void frmComTool::on_sendButton_07_clicked()
-{
-    QString str = ui->textEdit07->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 7);
-}
-
-
-void frmComTool::on_sendButton_08_clicked()
-{
-    QString str = ui->textEdit08->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 8);
-}
-
-
-void frmComTool::on_sendButton_09_clicked()
-{
-    QString str = ui->textEdit09->toPlainText();
-    if (str.isEmpty()) {
-        return;
-    }
-
-    sendData(str, 9);
 }
 
 void frmComTool::on_cboxPortName_clicked()

@@ -152,7 +152,7 @@
          </widget>
         </item>
         <item row="5" column="0">
-         <widget class="QCheckBox" name="checkBox_hex06">
+         <widget class="QCheckBox" name="cb_hex06">
           <property name="text">
            <string>Hex</string>
           </property>
@@ -175,7 +175,7 @@
          </widget>
         </item>
         <item row="6" column="0">
-         <widget class="QCheckBox" name="checkBox_hex07">
+         <widget class="QCheckBox" name="cb_hex07">
           <property name="text">
            <string>Hex</string>
           </property>
@@ -198,14 +198,14 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QCheckBox" name="checkBox_hex03">
+         <widget class="QCheckBox" name="cb_hex03">
           <property name="text">
            <string>Hex</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QCheckBox" name="checkBox_hex05">
+         <widget class="QCheckBox" name="cb_hex05">
           <property name="text">
            <string>Hex</string>
           </property>
@@ -228,7 +228,7 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QCheckBox" name="checkBox_hex02">
+         <widget class="QCheckBox" name="cb_hex02">
           <property name="text">
            <string>Hex</string>
           </property>
@@ -277,7 +277,7 @@
          </widget>
         </item>
         <item row="8" column="0">
-         <widget class="QCheckBox" name="checkBox_hex09">
+         <widget class="QCheckBox" name="cb_hex09">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -316,7 +316,7 @@
          </widget>
         </item>
         <item row="7" column="0">
-         <widget class="QCheckBox" name="checkBox_hex08">
+         <widget class="QCheckBox" name="cb_hex08">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -371,7 +371,7 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QCheckBox" name="checkBox_hex01">
+         <widget class="QCheckBox" name="cb_hex01">
           <property name="text">
            <string>Hex</string>
           </property>
@@ -394,7 +394,7 @@
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QCheckBox" name="checkBox_hex04">
+         <widget class="QCheckBox" name="cb_hex04">
           <property name="text">
            <string>Hex</string>
           </property>

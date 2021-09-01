@@ -10,6 +10,7 @@ namespace Ui
 class frmComTool;
 }
 
+#define SEND_BTN_NUM            9
 #define HIGH_LIGHT_COLOR_1      1
 #define HIGH_LIGHT_COLOR_2      2
 #define HIGH_LIGHT_COLOR_3      3
@@ -70,6 +71,7 @@ private slots:
     void append(int type, const QString &data, bool clear = false, bool isCheckHex = true);
     bool StrHaveChinese(QString str);
     QString formatInput(QString hexStr);
+    void moreSendbtn_func(int index);
     bool isCheckHex(int no);
 
 private slots:
@@ -91,15 +93,6 @@ private slots:
     void on_action_HighLight2_triggered();
     void on_action_HighLight3_triggered();
     void on_expandButton_clicked();
-    void on_sendButton_01_clicked();
-    void on_sendButton_02_clicked();
-    void on_sendButton_03_clicked();
-    void on_sendButton_04_clicked();
-    void on_sendButton_05_clicked();
-    void on_sendButton_06_clicked();
-    void on_sendButton_07_clicked();
-    void on_sendButton_08_clicked();
-    void on_sendButton_09_clicked();
     void on_cboxPortName_clicked();
     void on_moreConfig_clicked();
 };
