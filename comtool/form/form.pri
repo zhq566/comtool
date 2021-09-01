@@ -1,8 +1,11 @@
 FORMS += \
-    $$PWD/frmcomtool.ui
+    $$PWD/frmcomtool.ui \
+    $$PWD/tailcheck.ui
 
 HEADERS += \
-    $$PWD/frmcomtool.h
+    $$PWD/frmcomtool.h \
+    $$PWD/tailcheck.h
 
 SOURCES += \
-    $$PWD/frmcomtool.cpp
+    $$PWD/frmcomtool.cpp \
+    $$PWD/tailcheck.cpp

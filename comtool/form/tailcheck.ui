@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TailCheck</class>
+ <widget class="QWidget" name="TailCheck">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>641</width>
+    <height>499</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>621</width>
+     <height>481</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="10" column="2">
+     <widget class="QLabel" name="label_10">
+      <property name="text">
+       <string>x16 + x12 + x5 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QRadioButton" name="crc8Btn">
+      <property name="text">
+       <string>CRC-8</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>x8 + x5 + x4 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="17" column="2">
+     <widget class="QLabel" name="label_16">
+      <property name="text">
+       <string>用256减去所得模值得到校验结果</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="Line" name="line_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="2">
+     <widget class="QLabel" name="label_11">
+      <property name="text">
+       <string>x16 + x12 + x5 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0">
+     <widget class="QRadioButton" name="radioButton_8">
+      <property name="text">
+       <string>CRC-16/USB</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="2">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>x16 + x15 + x2 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="Line" name="line_6">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="2">
+     <widget class="QLabel" name="label_14">
+      <property name="text">
+       <string>x16 + x13 + x12 + x11 + x10 + x8 + x6 + x5 + x2 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QRadioButton" name="radioButton_9">
+      <property name="text">
+       <string>CRC-16/MODBUS</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="0">
+     <widget class="QRadioButton" name="radioButton_11">
+      <property name="text">
+       <string>CRC-16/CCITT-FALSE</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="0">
+     <widget class="Line" name="line_4">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="2">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>x16 + x12 + x5 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="0">
+     <widget class="QRadioButton" name="radioButton_15">
+      <property name="text">
+       <string>CRC-32</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>x8 + x2 + x + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QRadioButton" name="cs8Btn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>CheckSum-8</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>x16 + x15 + x2 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="17" column="0">
+     <widget class="QRadioButton" name="lrcBtn">
+      <property name="text">
+       <string>LRC</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="2">
+     <widget class="QLabel" name="label_13">
+      <property name="text">
+       <string>x16 + x12 + x5 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="18" column="0">
+     <widget class="QRadioButton" name="bccBtn">
+      <property name="text">
+       <string>BCC(XOR)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="Line" name="line">
+      <property name="minimumSize">
+       <size>
+        <width>1</width>
+        <height>1</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="crcItuBtn">
+      <property name="text">
+       <string>CRC-8/ITU</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>x8 + x2 + x + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="0">
+     <widget class="QRadioButton" name="radioButton_12">
+      <property name="text">
+       <string>CRC-16/X25</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QRadioButton" name="radioButton_5">
+      <property name="text">
+       <string>CRC-8/ROHC</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QRadioButton" name="radioButton_7">
+      <property name="text">
+       <string>CRC-16/IBM</string>
+      </property>
+     </widget>
+    </item>
+    <item row="18" column="2">
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>将所有数据异或得出，故俗称异或校验</string>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="0">
+     <widget class="QRadioButton" name="radioButton_14">
+      <property name="text">
+       <string>CRC-16/DNP</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="Line" name="line_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>x8 + x2 + x + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="2">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>x16 + x15 + x2 + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QRadioButton" name="radioButton_10">
+      <property name="text">
+       <string>CRC-16/CCITT</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QRadioButton" name="ck16Btn">
+      <property name="text">
+       <string>CheckSum-16</string>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="2">
+     <widget class="QLabel" name="label_15">
+      <property name="text">
+       <string>x32 + x26 + x23 + x22 + x16 + x12 + x11 + x10 + x8 + x7 + x5 + x4 + x2 + x + 1</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>所有数据相加结果取低两字节</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QRadioButton" name="radioButton_6">
+      <property name="text">
+       <string>CRC-8/MAXIM</string>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="0">
+     <widget class="QRadioButton" name="radioButton_13">
+      <property name="text">
+       <string>CRC-16/XMODEM</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="Line" name="line_7">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="Line" name="line_8">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="Line" name="line_9">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="Line" name="line_10">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1">
+     <widget class="Line" name="line_11">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="Line" name="line_12">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="Line" name="line_13">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="Line" name="line_14">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
+     <widget class="Line" name="line_15">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1">
+     <widget class="Line" name="line_16">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="13" column="1">
+     <widget class="Line" name="line_17">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="14" column="1">
+     <widget class="Line" name="line_18">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="15" column="1">
+     <widget class="Line" name="line_19">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="17" column="1">
+     <widget class="Line" name="line_20">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="18" column="1">
+     <widget class="Line" name="line_21">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>所有数据相加结果取低字节</string>
+      </property>
+     </widget>
+    </item>
+    <item row="16" column="2">
+     <widget class="Line" name="line_22">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

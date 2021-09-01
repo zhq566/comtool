@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "qtcpsocket.h"
 #include "qextserialport.h"
+#include "tailcheck.h"
 
 namespace Ui
 {
@@ -55,8 +56,14 @@ private:
     QString highLight2_str;
     QString highLight3_str;
 
-    void HightLight(int type, QString highLightStr);    //高亮关键词
+    TailCheck *tailCheckForm;
+
     void update_comName(void);
+    void append(int type, const QString &data, bool clear = false, bool isCheckHex = true);
+    bool StrHaveChinese(QString str);
+    bool isCheckHex(int no);
+    QString formatInput(QString hexStr);
+    void HightLight(int type, QString highLightStr);    //高亮关键词
 
 private slots:
     void initForm();            //初始化窗体数据
@@ -66,13 +73,11 @@ private slots:
     void sendData();            //发送串口数据
     void sendData(QString data, int hexCheck);//发送串口数据带参数
     void saveData();            //保存串口数据
-
     void changeEnable(bool b);  //改变状态
-    void append(int type, const QString &data, bool clear = false, bool isCheckHex = true);
-    bool StrHaveChinese(QString str);
-    QString formatInput(QString hexStr);
     void moreSendbtn_func(int index);
-    bool isCheckHex(int no);
+    void action_HighLight1_triggered(bool);
+    void action_HighLight2_triggered(bool);
+    void action_HighLight3_triggered(bool);
 
 private slots:
     void connectNet();
@@ -89,12 +94,10 @@ private slots:
     void on_btnStart_clicked();
     void on_ckAutoSend_stateChanged(int arg1);
     void on_ckAutoSave_stateChanged(int arg1);
-    void on_action_HighLight1_triggered();
-    void on_action_HighLight2_triggered();
-    void on_action_HighLight3_triggered();
     void on_expandButton_clicked();
     void on_cboxPortName_clicked();
     void on_moreConfig_clicked();
+    void on_cbTc_clicked();
 };
 
 #endif // FRMCOMTOOL_H

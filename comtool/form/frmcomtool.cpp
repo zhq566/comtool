@@ -33,15 +33,15 @@ void frmComTool::initForm()
     /* 添加高亮菜单 */
     highLight1 = new QAction("高亮：颜色1",ui->txtMain);
     ui->txtMain->addAction(highLight1);
-    connect(highLight1,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight1_triggered()));
+    connect(highLight1, SIGNAL(triggered(bool)), this, SLOT(action_HighLight1_triggered(bool)));
 
     highLight2 = new QAction("高亮：颜色2",ui->txtMain);
     ui->txtMain->addAction(highLight2);
-    connect(highLight2,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight2_triggered()));
+    connect(highLight2, SIGNAL(triggered(bool)), this, SLOT(action_HighLight2_triggered(bool)));
 
     highLight3 = new QAction("高亮：颜色3",ui->txtMain);
     ui->txtMain->addAction(highLight3);
-    connect(highLight3,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight3_triggered()));
+    connect(highLight3, SIGNAL(triggered(bool)), this, SLOT(action_HighLight3_triggered(bool)));
 
     ui->txtMain->setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -70,12 +70,17 @@ void frmComTool::initForm()
     socket = new QTcpSocket(this);
     socket->abort();
     connect(socket, SIGNAL(readyRead()), this, SLOT(readDataNet()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(readErrorNet()));
+    connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(readErrorNet()));
 
     timerConnect = new QTimer(this);
     connect(timerConnect, SIGNAL(timeout()), this, SLOT(connectNet()));
     timerConnect->setInterval(3000);
     timerConnect->start();
+
+    tailCheckForm = new TailCheck();
+    tailCheckForm->setWindowTitle("追加校验类型");
+    //tailCheckForm->show();on_cbTcBtn_clicked
+    connect(ui->cbTc, SIGNAL(clicked()), this, SLOT(on_cbTc_clicked()));
 
 #ifdef __arm__
     ui->widgetRight->setFixedWidth(280);
@@ -708,7 +713,7 @@ void frmComTool::on_ckAutoSave_stateChanged(int arg1)
     }
 }
 
-void frmComTool::on_action_HighLight1_triggered()
+void frmComTool::action_HighLight1_triggered(bool)
 {
     if (highLight1->text() == HIGH_LIGHT_TITLE_1) {
         if (ui->txtMain->textCursor().selectedText() == "") {
@@ -729,7 +734,7 @@ void frmComTool::on_action_HighLight1_triggered()
     return;
 }
 
-void frmComTool::on_action_HighLight2_triggered()
+void frmComTool::action_HighLight2_triggered(bool)
 {
     if (highLight2->text() == HIGH_LIGHT_TITLE_2) {
         if (ui->txtMain->textCursor().selectedText() == "") {
@@ -750,7 +755,7 @@ void frmComTool::on_action_HighLight2_triggered()
     return;
 }
 
-void frmComTool::on_action_HighLight3_triggered()
+void frmComTool::action_HighLight3_triggered(bool)
 {
     if (highLight3->text() == HIGH_LIGHT_TITLE_3) {
         if (ui->txtMain->textCursor().selectedText() == "") {
@@ -984,6 +989,14 @@ void frmComTool::on_moreConfig_clicked()
     } else {
         ui->widgetRight->hide();
         ui->moreConfig->setText("<<<");
+    }
+}
+
+void frmComTool::on_cbTc_clicked()
+{
+    if (ui->cbTc->isChecked()) {
+        tailCheckForm->show();
+        return;
     }
 }
 
