@@ -68,7 +68,8 @@ private slots:
 
     void changeEnable(bool b);  //改变状态
     void append(int type, const QString &data, bool clear = false, bool isCheckHex = true);
-
+    bool StrHaveChinese(QString str);
+    QString formatInput(QString hexStr);
     bool isCheckHex(int no);
 
 private slots:

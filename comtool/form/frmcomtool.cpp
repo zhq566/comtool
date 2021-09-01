@@ -361,32 +361,32 @@ void frmComTool::append(int type, const QString &data, bool clear, bool isCheckH
     QString strType;
     ui->txtMain->setTextBackgroundColor(QColor("white"));
     if (type == 0) {
-        if (isCheckHex) {
-            strType = "串口发送[HEX] >>";
-        } else {
-            strType = "串口发送[ASCII] >>";
-        }
+        strType = "串口发送";
         ui->txtMain->setTextColor(QColor("dodgerblue"));
     } else if (type == 1) {
-        strType = "串口接收 <<";
+        strType = "串口接收";
         ui->txtMain->setTextColor(QColor("red"));
     } else if (type == 2) {
-        strType = "处理延时 >>";
+        strType = "处理延时";
         ui->txtMain->setTextColor(QColor("gray"));
     } else if (type == 3) {
-        strType = "正在校验 >>";
+        strType = "正在校验";
         ui->txtMain->setTextColor(QColor("green"));
     } else if (type == 4) {
-        strType = "网络发送 >>";
+        strType = "网络发送";
         ui->txtMain->setTextColor(QColor(24, 189, 155));
     } else if (type == 5) {
-        strType = "网络接收 <<";
+        strType = "网络接收";
         ui->txtMain->setTextColor(QColor(255, 107, 107));
     } else if (type == 6) {
-        strType = "提示信息 >>";
+        strType = "提示信息";
         ui->txtMain->setTextColor(QColor(100, 184, 255));
     }
-
+    if (isCheckHex) {
+        strType += "[HEX]:";
+    } else {
+        strType += "[ASCII]:";
+    }
     ui->txtMain->append(QString("时间[%1] %2 %3").arg(TIMEMS).arg(strType).arg(strData));
     currentCount++;
     if (highLight1_str != "") {
@@ -440,9 +440,53 @@ void frmComTool::readData()
         //启用网络转发则调用网络发送数据
         if (tcpOk) {
             socket->write(data);
-            append(4, QString(buffer), false, false);
+            append(4, QString(buffer), false, ui->ckHexSend->isChecked());
         }
     }
+}
+
+
+bool frmComTool::StrHaveChinese(QString str)
+{
+    int nCount = str.count();
+    for(int i = 0; i < nCount; i++)
+    {
+        QChar ch = str.at(i);
+        ushort uNum = ch.unicode();
+        if(uNum >= 0x4E00 && uNum <= 0x9FA5)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+QString frmComTool::formatInput(QString hexStr)
+{
+    //去非法字符
+    QRegularExpression re("[g-zG-Z]");
+    hexStr.replace(re, "").simplified();
+
+    //去掉所有空格
+    QRegularExpression re1("\\s{1,}");
+    hexStr.replace(re1, "");
+
+    int strlen = hexStr.length();
+    if (strlen%2 != 0) {
+        //长度奇数补‘0’
+        hexStr += "0";
+        frmComTool::append(6, "发送HEX长度为奇数，默认补0，请确认!", false, false);
+    }
+
+    //插入空格
+    strlen = hexStr.length();
+    while(strlen - 2 > 0)
+    {
+        strlen = strlen - 2;
+        hexStr.insert(strlen," ");
+    }
+
+    return hexStr.toUpper();
 }
 
 void frmComTool::sendData()
@@ -472,13 +516,20 @@ void frmComTool::sendData(QString data, int hexCheckNo)
         data += "\r";
     }
 
+    //屏蔽中文
+    if (frmComTool::StrHaveChinese(data)) {
+       frmComTool::append(6, "本软件不支持发送中文字符，请确认!", false, false);
+       return;
+    }
+
     QByteArray buffer;
     bool checkResult = isCheckHex(hexCheckNo);
 
     if (checkResult) {
+        data = frmComTool::formatInput(data);
         buffer = QUIHelper::hexStrToByteArray(data);
     } else {
-        buffer = QUIHelper::asciiStrToByteArray(data);
+        buffer = data.toLocal8Bit();
     }
 
     com->write(buffer);
@@ -736,7 +787,7 @@ void frmComTool::readDataNet()
             buffer = QUIHelper::byteArrayToAsciiStr(data);
         }
 
-        append(5, buffer, false, false);
+        append(5, buffer, false, ui->ckHexReceive->isChecked());
 
         //将收到的网络数据转发给串口
         if (comOk) {

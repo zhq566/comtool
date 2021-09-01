@@ -1103,6 +1103,9 @@ QByteArray QUIHelper::hexStrToByteArray(const QString &data)
 
         if ((hexdata == 16) || (lowhexdata == 16)) {
             break;
+        } else if (hexdata == -1 || lowhexdata == -1) {
+            i++;
+            continue;
         } else {
             hexdata = hexdata * 16 + lowhexdata;
         }
