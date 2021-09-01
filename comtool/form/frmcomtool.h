@@ -100,6 +100,7 @@ private slots:
     void on_sendButton_08_clicked();
     void on_sendButton_09_clicked();
     void on_cboxPortName_clicked();
+    void on_moreConfig_clicked();
 };
 
 #endif // FRMCOMTOOL_H

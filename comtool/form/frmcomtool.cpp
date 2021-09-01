@@ -14,22 +14,6 @@ frmComTool::frmComTool(QWidget *parent) : QWidget(parent), ui(new Ui::frmComTool
     highLight2_str = "";
     highLight3_str = "";
 
-    /* 添加高亮菜单 */
-    highLight1 = new QAction("高亮：颜色1",ui->txtMain);
-    ui->txtMain->addAction(highLight1);
-    connect(highLight1,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight1_triggered()));
-
-    highLight2 = new QAction("高亮：颜色2",ui->txtMain);
-    ui->txtMain->addAction(highLight2);
-    connect(highLight2,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight2_triggered()));
-
-    highLight3 = new QAction("高亮：颜色3",ui->txtMain);
-    ui->txtMain->addAction(highLight3);
-    connect(highLight3,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight3_triggered()));
-
-    ui->txtMain->setContextMenuPolicy(Qt::ActionsContextMenu);
-
-    ui->widget_sendUI->hide();
 }
 
 frmComTool::~frmComTool()
@@ -45,6 +29,21 @@ void frmComTool::initForm()
     receiveCount = 0;
     sendCount = 0;
     isShow = true;
+
+    /* 添加高亮菜单 */
+    highLight1 = new QAction("高亮：颜色1",ui->txtMain);
+    ui->txtMain->addAction(highLight1);
+    connect(highLight1,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight1_triggered()));
+
+    highLight2 = new QAction("高亮：颜色2",ui->txtMain);
+    ui->txtMain->addAction(highLight2);
+    connect(highLight2,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight2_triggered()));
+
+    highLight3 = new QAction("高亮：颜色3",ui->txtMain);
+    ui->txtMain->addAction(highLight3);
+    connect(highLight3,SIGNAL(triggered(bool)),this,SLOT(on_action_HighLight3_triggered()));
+
+    ui->txtMain->setContextMenuPolicy(Qt::ActionsContextMenu);
 
     ui->cboxSendInterval->addItems(AppConfig::Intervals);
     ui->cboxData->addItems(AppConfig::Datas);
@@ -81,6 +80,7 @@ void frmComTool::initForm()
 #ifdef __arm__
     ui->widgetRight->setFixedWidth(280);
 #endif
+    ui->widget_sendUI->hide();
 }
 
 void frmComTool::update_comName(void)
@@ -106,7 +106,7 @@ void frmComTool::initConfig()
 {
     frmComTool::update_comName();
 
-    ui->cboxPortName->setCurrentIndex(ui->cboxPortName->findText(AppConfig::PortName));
+    //ui->cboxPortName->setCurrentIndex(ui->cboxPortName->findText(AppConfig::PortName));
     connect(ui->cboxPortName, SIGNAL(currentIndexChanged(int)), this, SLOT(saveConfig()));
 
     QStringList baudList;
@@ -223,21 +223,21 @@ void frmComTool::initConfig()
 
     ui->checkBox_hex01->setChecked(AppConfig::sendTxt01_hex);
     connect(ui->checkBox_hex01, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex02->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex02->setChecked(AppConfig::sendTxt02_hex);
     connect(ui->checkBox_hex02, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex03->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex03->setChecked(AppConfig::sendTxt03_hex);
     connect(ui->checkBox_hex03, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex04->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex04->setChecked(AppConfig::sendTxt04_hex);
     connect(ui->checkBox_hex04, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex05->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex05->setChecked(AppConfig::sendTxt05_hex);
     connect(ui->checkBox_hex05, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex06->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex06->setChecked(AppConfig::sendTxt06_hex);
     connect(ui->checkBox_hex06, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex07->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex07->setChecked(AppConfig::sendTxt07_hex);
     connect(ui->checkBox_hex07, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex08->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex08->setChecked(AppConfig::sendTxt08_hex);
     connect(ui->checkBox_hex08, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
-    ui->checkBox_hex09->setChecked(AppConfig::sendTxt01_hex);
+    ui->checkBox_hex09->setChecked(AppConfig::sendTxt09_hex);
     connect(ui->checkBox_hex09, SIGNAL(stateChanged(int)), this, SLOT(saveConfig()));
 
     ui->textEdit01->setText(AppConfig::sendTxt01);
@@ -264,7 +264,7 @@ void frmComTool::initConfig()
 
 void frmComTool::saveConfig()
 {
-    AppConfig::PortName = ui->cboxPortName->currentText();
+    AppConfig::PortName = "COM1"; //ui->cboxPortName->currentText();
     AppConfig::BaudRate = ui->cboxBaudRate->currentText().toInt();
     AppConfig::DataBit = ui->cboxDataBit->currentText().toInt();
     AppConfig::Parity = ui->cboxParity->currentText();
@@ -974,3 +974,15 @@ void frmComTool::on_cboxPortName_clicked()
 {
     frmComTool::update_comName();
 }
+
+void frmComTool::on_moreConfig_clicked()
+{
+    if(ui->widgetRight->isHidden()) {
+        ui->widgetRight->show();
+        ui->moreConfig->setText(">>>");
+    } else {
+        ui->widgetRight->hide();
+        ui->moreConfig->setText("<<<");
+    }
+}
+
