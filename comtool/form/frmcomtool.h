@@ -78,6 +78,7 @@ private slots:
     void action_HighLight1_triggered(bool);
     void action_HighLight2_triggered(bool);
     void action_HighLight3_triggered(bool);
+    void SetTailCheckLable();
 
 private slots:
     void connectNet();

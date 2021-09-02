@@ -79,8 +79,10 @@ void frmComTool::initForm()
 
     tailCheckForm = new TailCheck();
     tailCheckForm->setWindowTitle("追加校验类型");
-    //tailCheckForm->show();on_cbTcBtn_clicked
+    //tailCheckForm->show();
     connect(ui->cbTc, SIGNAL(clicked()), this, SLOT(on_cbTc_clicked()));
+    connect(tailCheckForm, SIGNAL(hide_signal()), this, SLOT(SetTailCheckLable()));
+    connect(tailCheckForm, SIGNAL(close_signal()), this, SLOT(SetTailCheckLable()));
 
 #ifdef __arm__
     ui->widgetRight->setFixedWidth(280);
@@ -544,6 +546,15 @@ void frmComTool::sendData(QString data, int hexCheckNo)
         }
         data = frmComTool::formatInput(data);
         buffer = QUIHelper::hexStrToByteArray(data);
+        if (ui->cbTc->isChecked()) {
+            QString result = tailCheckForm->TailCheckData(buffer);
+            if (tailCheckForm->isLittleMode) {
+                result = QString("%1%2").arg(result.mid(2,2)).arg(result.mid(0,2));
+            }
+            data += result;
+            data = frmComTool::formatInput(data);
+            buffer = QUIHelper::hexStrToByteArray(data);
+        }
     } else {
         buffer = data.toLocal8Bit();
     }
@@ -998,5 +1009,51 @@ void frmComTool::on_cbTc_clicked()
         tailCheckForm->show();
         return;
     }
+    tailCheckForm->switchCheck = 0xff;
+    ui->labelTc->setText("None");
 }
 
+void frmComTool::SetTailCheckLable(void)
+{
+    /* label */
+    switch(tailCheckForm->switchCheck) {
+    case 0: ui->labelTc->setText("CheckSum-8");
+        break;
+    case 1: ui->labelTc->setText("CheckSum-16");
+        break;
+    case 2: ui->labelTc->setText("CRC8");
+        break;
+    case 3: ui->labelTc->setText("CRC8/ITU");
+        break;
+    case 4: ui->labelTc->setText("CRC8/ROHC");
+        break;
+    case 5: ui->labelTc->setText("CRC8/MAXIM");
+        break;
+    case 6: ui->labelTc->setText("CRC16/IBM");
+        break;
+    case 7: ui->labelTc->setText("CRC16/USB");
+        break;
+    case 8: ui->labelTc->setText("CRC16/MODBUS");
+        break;
+    case 9: ui->labelTc->setText("CRC16/C.T");
+        break;
+    case 10: ui->labelTc->setText("CRC16/C.T-F");
+        break;
+    case 11: ui->labelTc->setText("CRC16/X25");
+        break;
+    case 12: ui->labelTc->setText("CRC16/XMODEM");
+        break;
+    case 13: ui->labelTc->setText("CRC16/DNP");
+        break;
+    case 14: ui->labelTc->setText("CRC32");
+        break;
+    case 15: ui->labelTc->setText("LRC");
+        break;
+    case 16: ui->labelTc->setText("BCC(XOR)");
+        break;
+    default:ui->labelTc->setText("None");
+        ui->cbTc->setChecked(false);
+        break;
+    }
+
+}
