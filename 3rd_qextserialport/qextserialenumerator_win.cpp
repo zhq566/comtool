@@ -243,7 +243,7 @@ QList<QextPortInfo> QextSerialEnumeratorPrivate::getPorts_sys()
 #if (QT_VERSION >= QT_VERSION_CHECK(6,0,0))
     std::sort(ports.begin(), ports.end(), Comparison);
 #else
-    qSort(ipv4s);
+    qSort(ports.begin(), ports.end(), lessThan);
 #endif
     return ports;
 }
