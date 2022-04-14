@@ -47,6 +47,7 @@ void frmComTool::initForm()
 
     ui->cboxSendInterval->addItems(AppConfig::Intervals);
     ui->cboxData->addItems(AppConfig::Datas);
+    ui->cboxMode->setEditable(false);
 
     //读取数据
     timerRead = new QTimer(this);
@@ -71,6 +72,9 @@ void frmComTool::initForm()
     socket->abort();
     connect(socket, SIGNAL(readyRead()), this, SLOT(readDataNet()));
     connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(readErrorNet()));
+
+    tcpServer = new QTcpServer(this);
+    connect(tcpServer, &QTcpServer::newConnection, this, &frmComTool::newConnectionJoin);
 
     timerConnect = new QTimer(this);
     connect(timerConnect, SIGNAL(timeout()), this, SLOT(connectNet()));
@@ -678,9 +682,9 @@ void frmComTool::on_btnClear_clicked()
     append(0, "", true, false);
 }
 
-void frmComTool::on_btnStart_clicked()
+void frmComTool::TcpClientToRun(bool start = false)
 {
-    if (ui->btnStart->text() == "启动") {
+    if (start == true) {
         if (AppConfig::ServerIP == "" || AppConfig::ServerPort == 0) {
             append(6, "IP地址和远程端口不能为空", false, false);
             return;
@@ -691,6 +695,9 @@ void frmComTool::on_btnStart_clicked()
             ui->btnStart->setText("停止");
             append(6, "连接服务器成功", false, false);
             tcpOk = true;
+            ui->cboxMode->setEnabled(false);
+        } else {
+            append(6, "连接服务器失败", false, false);
         }
     } else {
         socket->disconnectFromHost();
@@ -698,7 +705,56 @@ void frmComTool::on_btnStart_clicked()
             ui->btnStart->setText("启动");
             append(6, "断开服务器成功", false, false);
             tcpOk = false;
+            ui->cboxMode->setEnabled(true);
         }
+    }
+}
+
+void frmComTool::TcpServerToRun(bool start = false)
+{
+    if (start == true) {
+        if (AppConfig::ServerIP == "" || AppConfig::ListenPort == 0) {
+            append(6, "IP地址和监听端口不能为空", false, false);
+            return;
+        }
+
+        if (!tcpServer->listen(QHostAddress(AppConfig::ServerIP), AppConfig::ListenPort)) {
+            append(6, tcpServer->errorString(), false, false);
+            return;
+        }
+        append(6, "监听:IP:"+AppConfig::ServerIP+" Port:"+QString::number(AppConfig::ListenPort)+" 成功!", false, false);
+        ui->btnStart->setText("停止");
+        tcpOk = true;
+        ui->cboxMode->setEnabled(false);
+    } else {
+        tcpServer->close();
+        if (!tcpServer->isListening()) {
+            ui->btnStart->setText("启动");
+            tcpOk = false;
+            ui->cboxMode->setEnabled(true);
+            append(6, "关闭监听成功!", false, false);
+        } else {
+            append(6, "关闭监听失败!", false, false);
+        }
+    }
+}
+
+void frmComTool::on_btnStart_clicked()
+{
+    if (ui->btnStart->text() == "启动") {
+        if (ui->cboxMode->currentIndex() == 1) {
+            //local tcp server mode
+            TcpServerToRun(true);
+            return;
+        }
+        TcpClientToRun(true);
+    } else {
+        if (ui->cboxMode->currentIndex() == 1) {
+            //local tcp server mode
+            TcpServerToRun(false);
+            return;
+        }
+        TcpClientToRun(false);
     }
 }
 
@@ -796,13 +852,49 @@ void frmComTool::connectNet()
                 ui->btnStart->setText("停止");
                 append(6, "连接服务器成功", false, false);
                 tcpOk = true;
+            } else {
+                append(6, "连接服务器失败", false, false);
             }
         }
     }
 }
+void frmComTool::ConnectionQuit()
+{
+    QTcpSocket *pt = qobject_cast <QTcpSocket*>(sender());
+    if(!pt)  return;
+    socketList.removeOne(pt);
+    pt->deleteLater();
+}
+
+void frmComTool::newConnectionJoin()
+{
+    //获取客户端连接
+    auto socket_temp = tcpServer->nextPendingConnection();//根据当前新连接创建一个QTepSocket
+    socket = socket_temp;
+    socketList.append(socket);
+    //连接QTcpSocket的信号槽，以读取新数据
+    connect(socket_temp, &QTcpSocket::readyRead, this, &frmComTool::readDataNet);
+    //当断开连接时发出的信号
+    connect(socket_temp, &QTcpSocket::disconnected, this, &frmComTool::ConnectionQuit);
+    append(6, "新连接加入Server："+socket->peerAddress().toString()+" Port:"+QString::number(socket->peerPort()), false, false);
+}
 
 void frmComTool::readDataNet()
 {
+    int i;
+    if (ui->cboxMode->currentIndex() == 1) {
+        //local tcp server mode
+        for (i = 0;i < socketList.count(); i++) {
+            socket = socketList.at(i);
+            if (socket->bytesAvailable() > 0) {
+                break;
+            }
+        }
+        if (i == socketList.count()) {
+            append(6, "Server接收到信息，但发生错误", false, false);
+            return;
+        }
+    }
     if (socket->bytesAvailable() > 0) {
         QUIHelper::sleep(AppConfig::SleepTime);
         QByteArray data = socket->readAll();

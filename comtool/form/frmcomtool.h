@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "qtcpsocket.h"
+#include "qtcpserver.h"
 #include "qextserialport.h"
 #include "tailcheck.h"
 
@@ -45,7 +46,9 @@ private:
     bool isShow;                //是否显示数据
 
     bool tcpOk;                 //网络是否正常
-    QTcpSocket *socket;         //网络连接对象
+    QTcpSocket *socket;         //网络连接Server对象
+    QList<QTcpSocket*> socketList;
+    QTcpServer *tcpServer;      //网络监听client对象
     QTimer *timerConnect;       //定时器重连
 
     QAction *highLight1;        //高亮1
@@ -79,9 +82,13 @@ private slots:
     void action_HighLight2_triggered(bool);
     void action_HighLight3_triggered(bool);
     void SetTailCheckLable();
+    void TcpClientToRun(bool);
+    void TcpServerToRun(bool);
 
 private slots:
     void connectNet();
+    void newConnectionJoin();
+    void ConnectionQuit();
     void readDataNet();
     void readErrorNet();
 
